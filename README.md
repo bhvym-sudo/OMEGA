@@ -1,4 +1,4 @@
-# 🔄 File Conversion Tool
+# OMEGA
 
 ![OMEGA](OMEGA.png)
 
