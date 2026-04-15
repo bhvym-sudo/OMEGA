@@ -1,5 +1,6 @@
 import pandas as pd
 from tqdm import tqdm
+from openpyxl import Workbook
 from .utils import Logger
 
 def convert(input_path, output_path):
@@ -19,12 +20,21 @@ def convert(input_path, output_path):
         df = pd.concat(chunks, ignore_index=True)
         
         Logger.info(f"Converting to Excel format...")
-        with tqdm(total=100, desc="Converting", unit="%", colour="magenta", dynamic_ncols=True) as pbar:
-            pbar.update(50)
-            df.to_excel(output_path, index=False)
-            pbar.update(50)
         
-        Logger.info(f"Writing Excel file to: {output_path}")
+        wb = Workbook()
+        ws = wb.active
+        
+        with tqdm(total=len(df) + 1, desc="Writing Excel", unit=" rows", colour="magenta", dynamic_ncols=True) as pbar:
+            ws.append(list(df.columns))
+            pbar.update(1)
+            
+            for row in df.itertuples(index=False, name=None):
+                ws.append(row)
+                pbar.update(1)
+        
+        Logger.info(f"Saving Excel file to: {output_path}")
+        wb.save(output_path)
+        
         Logger.success(f"Conversion completed! CSV → XLSX")
         Logger.info(f"Output file: {output_path}")
         return True

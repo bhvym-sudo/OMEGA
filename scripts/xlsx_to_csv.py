@@ -1,5 +1,6 @@
 import pandas as pd
 from tqdm import tqdm
+import csv
 from .utils import Logger
 
 def convert(input_path, output_path):
@@ -14,12 +15,19 @@ def convert(input_path, output_path):
         Logger.info(f"Loaded {len(df)} rows and {len(df.columns)} columns")
         
         Logger.info(f"Converting to CSV format...")
-        with tqdm(total=100, desc="Converting", unit="%", colour="magenta", dynamic_ncols=True) as pbar:
-            pbar.update(50)
-            df.to_csv(output_path, index=False)
-            pbar.update(50)
         
-        Logger.info(f"Writing CSV file to: {output_path}")
+        with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
+            writer = csv.writer(csvfile)
+            
+            with tqdm(total=len(df) + 1, desc="Writing CSV", unit=" rows", colour="magenta", dynamic_ncols=True) as pbar:
+                writer.writerow(df.columns)
+                pbar.update(1)
+                
+                for idx, row in enumerate(df.values):
+                    writer.writerow(row)
+                    pbar.update(1)
+        
+        Logger.info(f"Saving CSV file to: {output_path}")
         Logger.success(f"Conversion completed! XLSX → CSV")
         Logger.info(f"Output file: {output_path}")
         return True
