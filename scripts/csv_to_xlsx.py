@@ -33,6 +33,7 @@ def convert(input_path, output_path):
                 pbar.update(1)
         
         Logger.info(f"Saving Excel file to: {output_path}")
+        Logger.warning("DO NOT CLOSE THIS WINDOW - File is being saved...")
         wb.save(output_path)
         
         Logger.success(f"Conversion completed! CSV → XLSX")

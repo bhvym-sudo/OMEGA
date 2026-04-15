@@ -17,6 +17,10 @@ class Logger:
         print(f"{Fore.RED}[ERROR]{Style.RESET_ALL} {message}")
     
     @staticmethod
+    def warning(message):
+        print(f"{Fore.RED}[WARNING]{Style.RESET_ALL} {message}")
+    
+    @staticmethod
     def progress(message):
         print(f"{Fore.MAGENTA}[PROGRESS]{Style.RESET_ALL} {message}")
     
